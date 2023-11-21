@@ -164,8 +164,7 @@ charactersMap.forEach((row, i) => {
           '<p>As you explore this realm, keep a vigilant eye on the dark grass patches and the treacherous bridges ahead. They are teeming with danger.</p>',
           '<p>When you step onto dark grass or cross a bridge, you may find yourself face-to-face with wild code creatures.</p>',
           '<p>In your quest, you will encounter four formidable enemies, each guarding a piece of knowledge.</p>',
-          '<p>So, venture forth, fearless coder! Seek out the dark grass and bridges, face your battles with determination and conquer the trials that lie ahead in this vast digital frontier.</p>',
-          '<p>Oh, one more thing, a curious tidbit for you: a 30% chance of surprise battles awaits. But if you stroll without stirring a pixel, well, maybe a backtrack will spark some action. Apologies in advance if you meet the same foes twice; that\'s life in this digital realm, you know.</p>']
+          '<p>So, venture forth, fearless coder! Seek out the dark grass and bridges, face your battles with determination and conquer the trials that lie ahead in this vast digital frontier.</p>',]
         })
       )
     }
@@ -476,19 +475,25 @@ let renderables = [
 ]
 
 const battle = {
-  initiated: false
+  initiated: false,
+  battleStarted: false
 }
 
+
+
 const battle2 = {
-  initiated: false
+  initiated: false,
+  battleStarted2: false
 }
 
 const battle3 = {
-  initiated: false
+  initiated: false,
+  battleStarted3: false
 }
 
 const battle4 = {
-  initiated: false
+  initiated: false,
+  battleStarted4: false
 }
 
 function animate() {
@@ -524,37 +529,40 @@ function animate() {
           rectangle2: battleZone
         }) &&
         overlappingArea > (player.width * player.height) / 2 &&
-        Math.random() < 0.02
+        Math.random() < (battle.battleStarted ? 0 : 1) // Change 1 to 0 after initBattle has been called
       ) {
-        // deactivate current animation loop
-        window.cancelAnimationFrame(animationId)
-
-        audio.Map.stop()
-        audio.initBattle.play()
-        audio.battle.play()
-
-        battle.initiated = true
-        gsap.to('#overlappingDiv', {
-          opacity: 1,
-          repeat: 3,
-          yoyo: true,
-          duration: 0.4,
-          onComplete() {
-            gsap.to('#overlappingDiv', {
-              opacity: 1,
-              duration: 0.4,
-              onComplete() {
-                // activate a new animation loop
-                initBattle()
-                animateBattle()
-                gsap.to('#overlappingDiv', {
-                  opacity: 0,
-                  duration: 0.4
-                })
-              }
-            })
-          }
-        })
+        if (!battle.initiated) {
+          // Deactivate current animation loop
+          window.cancelAnimationFrame(animationId)
+  
+          audio.Map.stop()
+          audio.initBattle.play()
+          audio.battle.play()
+  
+          battle.initiated = true
+          gsap.to('#overlappingDiv', {
+            opacity: 1,
+            repeat: 3,
+            yoyo: true,
+            duration: 0.4,
+            onComplete() {
+              gsap.to('#overlappingDiv', {
+                opacity: 1,
+                duration: 0.4,
+                onComplete() {
+                  // Activate a new animation loop only if battle has been initiated
+                  initBattle()
+                  animateBattle()
+                  gsap.to('#overlappingDiv', {
+                    opacity: 0,
+                    duration: 0.4
+                  })
+                  battle.battleStarted = true; // Set battleStarted to true after initBattle has been called
+                }
+              })
+            }
+          })
+        }
         break
       }
     }
@@ -562,28 +570,29 @@ function animate() {
 
   // activate a battle 2
   if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
-      for (let i = 0; i < battleZones2.length; i++) {
-        const battleZone2 = battleZones2[i]
-        const overlappingArea =
-          (Math.min(
-            player.position.x + player.width,
-            battleZone2.position.x + battleZone2.width
-          ) -
-            Math.max(player.position.x, battleZone2.position.x)) *
-          (Math.min(
-            player.position.y + player.height,
-            battleZone2.position.y + battleZone2.height
-          ) -
-            Math.max(player.position.y, battleZone2.position.y))
-        if (
-          rectangularCollision({
-            rectangle1: player,
-            rectangle2: battleZone2
-          }) &&
-          overlappingArea > (player.width * player.height) / 2 &&
-          Math.random() < 0.02
-        ) {
-          // deactivate current animation loop
+    for (let i = 0; i < battleZones2.length; i++) {
+      const battleZone2 = battleZones2[i]
+      const overlappingArea =
+        (Math.min(
+          player.position.x + player.width,
+          battleZone2.position.x + battleZone2.width
+        ) -
+          Math.max(player.position.x, battleZone2.position.x)) *
+        (Math.min(
+          player.position.y + player.height,
+          battleZone2.position.y + battleZone2.height
+        ) -
+          Math.max(player.position.y, battleZone2.position.y))
+      if (
+        rectangularCollision({
+          rectangle1: player,
+          rectangle2: battleZone2
+        }) &&
+        overlappingArea > (player.width * player.height) / 2 &&
+        Math.random() < (battle.battleStarted2 ? 0 : 1) // Change 1 to 0 after initBattle has been called
+      ) {
+        if (!battle.initiated2) {
+          // Deactivate current animation loop
           window.cancelAnimationFrame(animationId)
   
           audio.Map.stop()
@@ -601,20 +610,22 @@ function animate() {
                 opacity: 1,
                 duration: 0.4,
                 onComplete() {
-                  // activate a new animation loop
+                  // Activate a new animation loop only if battle has been initiated
                   initBattle2()
                   animateBattle()
                   gsap.to('#overlappingDiv', {
                     opacity: 0,
                     duration: 0.4
                   })
+                  battle.battleStarted2 = true; // Set battleStarted to true after initBattle has been called
                 }
               })
             }
           })
-          break
         }
+        break
       }
+    }
   }
 
   // activate a battle 3
@@ -638,41 +649,44 @@ function animate() {
           rectangle2: battleZone3
         }) &&
         overlappingArea > (player.width * player.height) / 2 &&
-        Math.random() < 0.02
+        Math.random() < (battle.battleStarted3 ? 0 : 1) // Change 1 to 0 after initBattle has been called
       ) {
-        // deactivate current animation loop
-        window.cancelAnimationFrame(animationId)
-
-        audio.Map.stop()
-        audio.initBattle.play()
-        audio.battle.play()
-
-        battle3.initiated = true
-        gsap.to('#overlappingDiv', {
-          opacity: 1,
-          repeat: 3,
-          yoyo: true,
-          duration: 0.4,
-          onComplete() {
-            gsap.to('#overlappingDiv', {
-              opacity: 1,
-              duration: 0.4,
-              onComplete() {
-                // activate a new animation loop
-                initBattle3()
-                animateBattle()
-                gsap.to('#overlappingDiv', {
-                  opacity: 0,
-                  duration: 0.4
-                })
-              }
-            })
-          }
-        })
+        if (!battle.initiated) {
+          // Deactivate current animation loop
+          window.cancelAnimationFrame(animationId)
+  
+          audio.Map.stop()
+          audio.initBattle.play()
+          audio.battle.play()
+  
+          battle3.initiated = true
+          gsap.to('#overlappingDiv', {
+            opacity: 1,
+            repeat: 3,
+            yoyo: true,
+            duration: 0.4,
+            onComplete() {
+              gsap.to('#overlappingDiv', {
+                opacity: 1,
+                duration: 0.4,
+                onComplete() {
+                  // Activate a new animation loop only if battle has been initiated
+                  initBattle3()
+                  animateBattle()
+                  gsap.to('#overlappingDiv', {
+                    opacity: 0,
+                    duration: 0.4
+                  })
+                  battle.battleStarted3 = true; // Set battleStarted to true after initBattle has been called
+                }
+              })
+            }
+          })
+        }
         break
       }
     }
-}
+  }
 
 // activate a battle 4
 if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
@@ -695,37 +709,40 @@ if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
         rectangle2: battleZone4
       }) &&
       overlappingArea > (player.width * player.height) / 2 &&
-      Math.random() < 0.03
+      Math.random() < (battle.battleStarted4 ? 0 : 1) // Change 1 to 0 after initBattle has been called
     ) {
-      // deactivate current animation loop
-      window.cancelAnimationFrame(animationId)
+      if (!battle.initiated) {
+        // Deactivate current animation loop
+        window.cancelAnimationFrame(animationId)
 
-      audio.Map.stop()
-      audio.initBattle.play()
-      audio.finalBattle.play()
+        audio.Map.stop()
+        audio.initBattle.play()
+        audio.finalBattle.play()
 
-      battle4.initiated = true
-      gsap.to('#overlappingDiv', {
-        opacity: 1,
-        repeat: 3,
-        yoyo: true,
-        duration: 0.4,
-        onComplete() {
-          gsap.to('#overlappingDiv', {
-            opacity: 1,
-            duration: 0.4,
-            onComplete() {
-              // activate a new animation loop
-              initBattle4()
-              animateBattle()
-              gsap.to('#overlappingDiv', {
-                opacity: 0,
-                duration: 0.4
-              })
-            }
-          })
-        }
-      })
+        battle4.initiated = true
+        gsap.to('#overlappingDiv', {
+          opacity: 1,
+          repeat: 3,
+          yoyo: true,
+          duration: 0.4,
+          onComplete() {
+            gsap.to('#overlappingDiv', {
+              opacity: 1,
+              duration: 0.4,
+              onComplete() {
+                // Activate a new animation loop only if battle has been initiated
+                initBattle4()
+                animateBattle()
+                gsap.to('#overlappingDiv', {
+                  opacity: 0,
+                  duration: 0.4
+                })
+                battle.battleStarted4 = true; // Set battleStarted to true after initBattle has been called
+              }
+            })
+          }
+        })
+      }
       break
     }
   }
@@ -947,6 +964,20 @@ addEventListener('click', () => {
   }
 })
 
+function handleSpacebar(event) {
+  if (event.code === 'Space') {
+    event.preventDefault();
+  }
+}
+
+function disableSpacebar() {
+  document.addEventListener('keydown', handleSpacebar);
+}
+
+function enableSpacebar() {
+  document.removeEventListener('keydown', handleSpacebar);
+}
+
 function changeText(button) {
     button.innerHTML = "Yes";
   }
@@ -959,3 +990,7 @@ function changeText(button) {
     
     window.location.href = 'info.html'; 
   }
+
+  window.onkeydown = function(e) { 
+    return !(e.keyCode == 32);
+};
