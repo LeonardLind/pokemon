@@ -24,6 +24,8 @@ function initBattle() {
   document.querySelector('#enemyHealthBar').style.width = '100%'
   document.querySelector('#playerHealthBar').style.width = '100%'
   document.querySelector('#attacksBox').replaceChildren()
+  disableSpacebar();
+ 
 
   htmlNovice = new Monster(monsters.htmlNovice)
   PyroScript = new Monster(monsters.PyroScript)
@@ -56,6 +58,7 @@ function initBattle() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId)
+              enableSpacebar();
               animate()
               document.querySelector('#userInterface').style.display = 'none'
               document.querySelector('#htmlNovice').style.display = 'none'
@@ -92,6 +95,7 @@ function initBattle() {
               opacity: 1,
               onComplete: () => {
                 cancelAnimationFrame(battleAnimationId)
+                enableSpacebar();
                 animate()
                 document.querySelector('#userInterface').style.display = 'none'
                 document.querySelector('#htmlNovice').style.display = 'none'
@@ -126,6 +130,7 @@ function initBattle2() {
   document.querySelector('#enemyHealthBar').style.width = '100%'
   document.querySelector('#playerHealthBar').style.width = '100%'
   document.querySelector('#attacksBox').replaceChildren()
+  disableSpacebar();
 
   CSSArtisan = new Monster(monsters.CSSArtisan)
   PyroScript = new Monster(monsters.PyroScript)
@@ -158,6 +163,7 @@ function initBattle2() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId)
+              enableSpacebar();
               animate()
               document.querySelector('#userInterface').style.display = 'none'
               document.querySelector('#CSSArtisan').style.display = 'none'
@@ -195,6 +201,7 @@ function initBattle2() {
               opacity: 1,
               onComplete: () => {
                 cancelAnimationFrame(battleAnimationId)
+                enableSpacebar();
                 animate()
                 document.querySelector('#userInterface').style.display = 'none'
                 document.querySelector('#CSSArtisan').style.display = 'none'
@@ -227,6 +234,7 @@ function initBattle3() {
   document.querySelector('#enemyHealthBar').style.width = '100%'
   document.querySelector('#playerHealthBar').style.width = '100%'
   document.querySelector('#attacksBox').replaceChildren()
+  disableSpacebar();
 
   JavaScriptGuru = new Monster(monsters.JavaScriptGuru)
   PyroScript = new Monster(monsters.PyroScript)
@@ -259,6 +267,7 @@ function initBattle3() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId)
+              enableSpacebar();
               animate()
               document.querySelector('#userInterface').style.display = 'none'
               document.querySelector('#JavaScriptGuru').style.display = 'none'
@@ -296,6 +305,7 @@ function initBattle3() {
               opacity: 1,
               onComplete: () => {
                 cancelAnimationFrame(battleAnimationId)
+                enableSpacebar();
                 animate()
                 document.querySelector('#userInterface').style.display = 'none'
                 document.querySelector('#JavaScriptGuru').style.display = 'none'
@@ -327,7 +337,8 @@ function initBattle4() {
   document.querySelector('#dialogueBox').style.display = 'none'
   document.querySelector('#enemyHealthBar').style.width = '100%'
   document.querySelector('#playerHealthBar').style.width = '100%'
-  document.querySelector('#attacksBox').replaceChildren()
+  document.querySelector('#attacksBox').replaceChildren()   
+  disableSpacebar();
 
   HRInquisitor = new Monster(monsters.HRInquisitor)
   PyroScript = new Monster(monsters.PyroScript)
@@ -360,16 +371,14 @@ function initBattle4() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId)
-              document.querySelector('#overlappingDiv2').style.display = 'block'
-              
-
+              enableSpacebar();
               battle.initiated = false
-              audio.creditTheme.play()
+              document.querySelector('#overlappingDiv2').style.display = 'block'
+              audio.creditTheme.play()            
             }
           })
         })
       }
-
 
       //HRInquisitor or enemy attacks right here
       const randomAttack =
@@ -393,10 +402,9 @@ function initBattle4() {
             opacity: 1,
             onComplete: () => {
               cancelAnimationFrame(battleAnimationId)
-              document.querySelector('#overlappingDiv2').style.display = 'block'
-              
-
+              enableSpacebar();
               battle.initiated = false
+              document.querySelector('#overlappingDiv2').style.display = 'block'
               audio.creditTheme.play()
               }
             })
@@ -424,7 +432,7 @@ function animateBattle() {
 }
 
 animate()
- //initBattle4()
+//initBattle4()
 //animateBattle()
 
 document.querySelector('#dialogueBox').addEventListener('click', (e) => {
